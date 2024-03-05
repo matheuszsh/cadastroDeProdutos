@@ -1,30 +1,34 @@
 package model.entities;
 
 public class Produto {
-    private static Integer idProduto = 0;
-
+    private String codigoDeId;
     private String nome;
     private Double preco;
     private Integer qntd;
 
-    public Produto(String nome, Double preco, Integer qntd){
+    public Produto(String codigoDeId,String nome, Double preco, Integer qntd){
+        this.codigoDeId = codigoDeId;
         this.nome = nome;
         this.preco = preco;
         this.qntd = qntd;
-        Produto.idProduto += 1;
     }
 
     @Override
     public String toString() {
         return "DADOS DO PRODUTO:\n\n" +
+                "Código De Identificação: " + this.getCodigoDeId() + "\n" +
                 "Nome: " + this.nome + "\n" +
-                "Preço Unitário: " + this.preco + "\n" +
+                "Preço Unitário: R$" + String.format("%.2f", this.preco) + "\n" +
                 "Quantidade: " + this.qntd + "\n\n" +
-                "Total Em Estoque: " + String.format("%.2f", montanteEmEstoque());
+                "Total Em Estoque: R$" + String.format("%.2f", montanteEmEstoque());
     }
 
-    public static Integer getIdProduto() {
-        return idProduto;
+    public String getCodigoDeId() {
+        return codigoDeId;
+    }
+
+    public void setCodigoDeId(String codigoDeId) {
+        this.codigoDeId = codigoDeId;
     }
 
     public String getNome() {
