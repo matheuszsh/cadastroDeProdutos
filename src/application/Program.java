@@ -16,6 +16,8 @@ public class Program {
             menuDaAplicacao();
         } catch (InputMismatchException erro) {
             System.out.println("Erro: Insira uma entrada válida do tipo inteiro.");
+        }   catch (RuntimeException erro){
+            System.out.println("Erro: ParseException");
         }
     }
 
@@ -47,6 +49,8 @@ public class Program {
                 menuDaAplicacao();
                 break;
             case 2:
+                entradaSaidaProduto();
+                menuDaAplicacao();
             case 3:
             case 4:
             default:
@@ -82,24 +86,47 @@ public class Program {
     // Métodos Utiliátios
 
     // Busca Por ID
-    public static void editarProduto(){
-        System.out.println("EDIÇÃO DE PRODUTO:\n");
+    public static Produto buscarIdProduto(){
         System.out.print("Informe o código do produto:");
         String pCodId = get.nextLine();
 
-        for (Produto Produto: produtos ) {
-            if (pCodId.equals(Produto.getCodigoDeId())){
-                System.out.println("EDIÇÃO DO PRODUTO:" + pCodId + "\n");
-                System.out.println("(1) - Alterar Código");
-                System.out.println("(2) - Alterar Nome");
-                System.out.println("(3) - Alterar Preço");
-                System.out.println("(4) - Alterar Quantidade");
+        for (Produto produto: produtos ) {
+            if (pCodId.equals(produto.getCodigoDeId())){
+                    return produto;
+            }
+        }
+        return null;
+    }
 
+
+    public static void entradaSaidaProduto(){
+        Produto produtoEncontrado = buscarIdProduto();
+
+        if (produtoEncontrado != null){
+            int opEnSa = 0;
+            do {
+                System.out.println("Operação que deseja realizar:\n");
+                System.out.println("(1) - Entrada");
+                System.out.println("(2) - Saida");
                 System.out.println();
-                System.out.println("(0) - Sair");
+                System.out.print(">>:");
+                opEnSa = get.nextInt();
+                get.nextLine();
+            }while(opEnSa <= 0 || opEnSa >= 3);
+
+            switch (opEnSa){
+                case 1:
+                    System.out.print("Insira qntd de entrada:");
+                    produtoEncontrado.entradaDeEstoque(get.nextInt());
+                    get.nextLine();
+                    System.out.println(produtoEncontrado);
+                    break;
+                case 2:
+                    break;
+                default:
+                    break;
             }
         }
     }
-
 }
 
