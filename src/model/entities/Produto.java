@@ -7,12 +7,12 @@ import java.util.Date;
 public class Produto {
     private static SimpleDateFormat dateFormat= new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
-
     private String codigoDeId;
     private String descricao;
     private Double preco;
     private Integer qntd;
     private Date dataDeCadastro;
+    private LogProduto logProduto;
 
     public Produto(String codigoDeId,String descricao, Double preco, Integer qntd){
         this.codigoDeId = codigoDeId;

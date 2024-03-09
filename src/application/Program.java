@@ -52,7 +52,11 @@ public class Program {
                 entradaSaidaProduto();
                 menuDaAplicacao();
             case 3:
+                editarProduto();
+                menuDaAplicacao();
             case 4:
+                removerProduto();
+                menuDaAplicacao();
             default:
                 System.out.println("Opção Inválida. Tente novamente.");
                 menuDaAplicacao();
@@ -60,25 +64,25 @@ public class Program {
 
         }
     }
-
+    //Função para cadastrar um produto
     public static void cadastrarProduto(){
         System.out.println("CADASTRO DE PRODUTO:\n");
 
-        System.out.print("Codigo De Identificação do produto:");
+        System.out.print("Codigo de identificação do produto:");
         String pCodId = get.nextLine();
 
-        System.out.print("Nome Do Produto:");
-        String pNome = get.nextLine();
+        System.out.print("Descrição do produto:");
+        String pDescricao = get.nextLine();
 
-        System.out.print("Preço do Produto:");
+        System.out.print("Preço do produto:");
         Double pPreco = get.nextDouble();
         get.nextLine();
 
-        System.out.print("Quantidade do Produto:");
+        System.out.print("Quantidade do produto:");
         Integer pQntd = get.nextInt();
         get.nextLine();
 
-        produtos.add(new Produto(pCodId,pNome, pPreco, pQntd));
+        produtos.add(new Produto(pCodId,pDescricao, pPreco, pQntd));
 
         System.out.println(produtos.get(produtos.size()-1));
     }
@@ -98,7 +102,7 @@ public class Program {
         return null;
     }
 
-
+    // Entrada e saída de produtos
     public static void entradaSaidaProduto(){
         Produto produtoEncontrado = buscarIdProduto();
 
@@ -122,10 +126,71 @@ public class Program {
                     System.out.println(produtoEncontrado);
                     break;
                 case 2:
+                    System.out.print("Insira qntd de saída:");
+                    produtoEncontrado.saidaDeEstoque(get.nextInt());
+                    get.nextLine();
+                    System.out.println(produtoEncontrado);
                     break;
                 default:
                     break;
             }
+        }
+        else {
+            System.out.println("Produto não Encontrado.");
+        }
+    }
+
+    // Função para editar produtos
+    public static void editarProduto(){
+        Produto produtoEncontrado = buscarIdProduto();
+
+        if (produtoEncontrado != null){
+            int opEditar = 0;
+            do {
+                System.out.println("Selecione o elemento para editar:\n");
+                System.out.println("(1) - Código");
+                System.out.println("(2) - Descrição");
+                System.out.println("(3) - Preço");
+                System.out.println();
+                System.out.println(">>:");
+                opEditar = get.nextInt();
+                get.nextLine();
+            }while (opEditar <= 0 || opEditar >= 4);
+
+            switch (opEditar){
+                case 1:
+                    System.out.println("Editar Código "+ produtoEncontrado.getCodigoDeId());
+                    System.out.print("Novo Código:");
+                    produtoEncontrado.setCodigoDeId(get.nextLine());
+                    break;
+                case 2:
+                    System.out.println("Editar Descrição "+ produtoEncontrado.getDescricao());
+                    System.out.print("Nova Descrição:");
+                    produtoEncontrado.setDescricao(get.nextLine());
+                    break;
+                case 3:
+                    System.out.println("Editar Preço "+ produtoEncontrado.getPreco());
+                    System.out.print("Novo Preço:");
+                    produtoEncontrado.setPreco(get.nextDouble());
+                    get.nextLine();
+                    break;
+            }
+        }
+        else {
+            System.out.println("Produto não Encontrado.");
+        }
+    }
+
+    //Função pra remover produtos
+    public static void removerProduto(){
+        Produto produtoEncontrado = buscarIdProduto();
+
+        if (produtoEncontrado != null){
+            System.out.println("Produto Código '"+produtoEncontrado.getCodigoDeId() + "' Removido.");
+            produtos.remove(produtoEncontrado);
+        }
+        else {
+            System.out.println("Produto Inexistente.");
         }
     }
 }
