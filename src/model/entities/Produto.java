@@ -26,10 +26,10 @@ public class Produto {
     public String toString() {
         return "DADOS DO PRODUTO:\n\n" +
                 "Código De Identificação: " + this.getCodigoDeId() + "\n" +
-                "Nome: " + this.descricao + "\n" +
+                "Descrição: " + this.descricao + "\n" +
                 "Preço Unitário: R$" + String.format("%.2f", this.preco) + "\n" +
                 "Quantidade: " + this.qntd + "\n" +
-                "Data De Cadastro: " + dateFormat.format(dataDeCadastro) + "\n" +
+                "Update: " + dateFormat.format(dataDeCadastro) + "\n" +
                 "Total Em Estoque: R$" + String.format("%.2f", montanteEmEstoque());
 
     }
