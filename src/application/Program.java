@@ -17,7 +17,7 @@ public class Program {
         } catch (InputMismatchException erro) {
             System.out.println("Erro: Insira uma entrada válida do tipo inteiro.");
         }   catch (RuntimeException erro){
-            System.out.println("Erro: ParseException");
+            System.out.println("Erro: RuntimeException");
         }
     }
     // Aperte enter
@@ -42,7 +42,8 @@ public class Program {
         System.out.println("(2) - Buscar Produto");
         System.out.println("(3) - Entrada & Saida de Produto");
         System.out.println("(4) - Editar Produto");
-        System.out.println("(5) - Remover Produto");
+        System.out.println("(5) - Logs de produto");
+        System.out.println("(6) - Remover Produto");
         System.out.println("\n(0) - Sair");
         System.out.print("\n>>:");
 
@@ -68,6 +69,9 @@ public class Program {
                 editarProduto();
                 menuDaAplicacao();
             case 5:
+                logsDeProduto();
+                menuDaAplicacao();
+            case 6:
                 removerProduto();
                 menuDaAplicacao();
             default:
@@ -138,7 +142,7 @@ public class Program {
 
         if (produtoEncontrado != null){
             System.out.println(produtoEncontrado);
-            int opEnSa = 0;
+            int opEnSa;
             do {
                 System.out.println("Operação que deseja realizar:\n");
                 System.out.println("(1) - Entrada");
@@ -178,7 +182,7 @@ public class Program {
         Produto produtoEncontrado = buscarIdProduto();
 
         if (produtoEncontrado != null){
-            int opEditar = 0;
+            int opEditar;
             do {
                 System.out.println("Selecione o elemento para editar:\n");
                 System.out.println("(1) - Código");
@@ -221,6 +225,29 @@ public class Program {
         else {
             System.out.println("Produto não Encontrado.");
         }
+        aperteEnter();
+    }
+    public static void logsDeProduto(){
+        Produto produtoEncontrado = buscarIdProduto();
+
+        if (produtoEncontrado != null){
+            System.out.print("Selecione o tipo de Log:\n\n(1) - Entradas & Saidas\n(2) - Edições\n\n>>:");
+            int logOpcao = get.nextInt();
+            get.nextLine();
+
+            switch (logOpcao){
+                case 1, 2:
+                    produtoEncontrado.mostrarLogProduto(logOpcao);
+                    break;
+                default:
+                    System.out.println("Opção inválida.");
+                    break;
+            }
+        }
+        else {
+            System.out.println("Produto Inexistente.");
+        }
+
         aperteEnter();
     }
 
