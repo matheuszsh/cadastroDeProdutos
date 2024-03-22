@@ -1,6 +1,5 @@
 package model.entities;
 
-import model.entities.LogProduto;
 import model.enuns.editMenu;
 import model.enuns.entradasSaidas;
 
@@ -27,35 +26,6 @@ public class Produto {
         this.qntd = qntd;
         this.dataDeCadastro = new Date();
     }
-
-    // Contructor logEntradasSaidas
-    public Produto(String codigoDeId, Integer qntd) {
-        this.codigoDeId = codigoDeId;
-        this.qntd = qntd;
-    }
-
-    // Contructor logEditMenu
-    public Produto(String codigoDeId, String descricao, Double preco) {
-        this.codigoDeId = codigoDeId;
-        this.descricao = descricao;
-        this.preco = preco;
-    }
-
-    // Estudar sobrecarga de métodos !!!
-    public Produto(String atributoId,String atributoS, String atributoOldS, editMenu atributoMenu) {
-        this.codigoDeId = atributoId;
-        this.descricao = atributoS;
-    }
-
-    public Produto(String atributoId, String atributoOldS, editMenu atributoMenu){
-        this.codigoDeId = atributoId;
-    }
-
-    public Produto(String atributoId, Double atributoPreco, Double atributoOldPreco, editMenu atributoMenu) {
-        this.codigoDeId = atributoId;
-        this.preco = atributoPreco;
-    }
-
     @Override
     public String toString() {
         return "DADOS DO PRODUTO:\n\n" +
@@ -123,9 +93,9 @@ public class Produto {
 
     public void mostrarLogProduto(int option){
         for (LogProduto logProdutos : logProduto){
-            if (logProdutos.getIdLog() == 1 && logProdutos.getIdLog() == option) {
+            if (option == 1) {
                 System.out.println(logProdutos.logMovmentacoes());
-            } else if (logProdutos.getIdLog() == 2 && logProdutos.getIdLog() == option) {
+            } else if (option == 2) {
                 System.out.println(logProdutos.logEdicoes());
             }
         }
