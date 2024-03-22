@@ -42,12 +42,17 @@ public class Produto {
     }
 
     // Estudar sobrecarga de métodos !!!
-    public Produto(String atributoS, String atributoOldS, editMenu atributoMenu) {
-        this.codigoDeId = atributoS;
+    public Produto(String atributoId,String atributoS, String atributoOldS, editMenu atributoMenu) {
+        this.codigoDeId = atributoId;
         this.descricao = atributoS;
     }
 
-    public Produto(Double atributoPreco, Double atributoOldPreco, editMenu atributoMenu) {
+    public Produto(String atributoId, String atributoOldS, editMenu atributoMenu){
+        this.codigoDeId = atributoId;
+    }
+
+    public Produto(String atributoId, Double atributoPreco, Double atributoOldPreco, editMenu atributoMenu) {
+        this.codigoDeId = atributoId;
         this.preco = atributoPreco;
     }
 
@@ -82,7 +87,7 @@ public class Produto {
         String oldDescricao = this.descricao;
         this.descricao = descricao;
         this.dataDeCadastro = new Date();
-        this.logProduto.add(new LogProduto(codigoDeId, oldDescricao, editMenu.DESCRICAO));
+        this.logProduto.add(new LogProduto(codigoDeId,descricao, oldDescricao, editMenu.DESCRICAO));
 
     }
 
@@ -94,7 +99,7 @@ public class Produto {
         Double oldPreco = this.preco;
         this.preco = preco;
         this.dataDeCadastro = new Date();
-        this.logProduto.add(new LogProduto(preco, oldPreco, editMenu.PRECO));
+        this.logProduto.add(new LogProduto(codigoDeId,preco, oldPreco, editMenu.PRECO));
 
     }
 

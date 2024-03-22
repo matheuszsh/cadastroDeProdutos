@@ -24,9 +24,18 @@ public class LogProduto extends Produto{
         this.oldString = atributoOldS;
     }
 
+    public LogProduto(String atributoId,String atributoS,String atributoOldS, editMenu atributoMenu){
+        super(atributoId,atributoS, atributoOldS, atributoMenu);
+        this.dataProduto = new Date();
+        this.idLog = 2;
+        this.opcoesEdicao = atributoMenu;
+        this.oldString = atributoOldS;
+    }
+
+
     //Double Construtor
-    public LogProduto(Double atributoPreco, Double atributoOldPreco, editMenu atributoMenu){
-        super(atributoPreco,atributoOldPreco,atributoMenu);
+    public LogProduto(String atributoId,Double atributoPreco, Double atributoOldPreco, editMenu atributoMenu){
+        super(atributoId,atributoPreco,atributoOldPreco,atributoMenu);
         this.dataProduto = new Date();
         this.idLog = 2;
         this.opcoesEdicao = atributoMenu;
@@ -56,7 +65,7 @@ public class LogProduto extends Produto{
                     "' --> '" + this.getDescricao() + "' " + this.dataProduto;
         } else if (opcoesEdicao == editMenu.PRECO) {
             result = "Produto '" + this.getCodigoDeId() + "' editado: " + editMenu.PRECO + " '" + oldDouble +
-                    "' --> '" + this.getCodigoDeId() + this.dataProduto;
+                    "' --> '" + this.getPreco() + "' " + this.dataProduto;
         }
         return result;
     }
@@ -64,9 +73,9 @@ public class LogProduto extends Produto{
     public String logMovmentacoes(){
         String result = null;
         if (movimentacoes == entradasSaidas.ENTRADAS){
-            result = "Entrada " + getQntd() + "Unidades do produto cod.'" + getCodigoDeId() + "' " + this.dataProduto;
+            result = "Entrada " + getQntd() + " Unidades do produto cod.'" + getCodigoDeId() + "' " + this.dataProduto;
         } else if (movimentacoes == entradasSaidas.SAIDAS) {
-            result = "Saídas " + getQntd() + "Unidades do produto cod.'" + getCodigoDeId() + "' " + this.dataProduto;
+            result = "Saídas " + getQntd() + " Unidades do produto cod.'" + getCodigoDeId() + "' " + this.dataProduto;
 
         }
         return result;
