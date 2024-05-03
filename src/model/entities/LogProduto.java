@@ -5,6 +5,8 @@ import model.enuns.entradasSaidas;
 
 import java.util.Date;
 
+// Essa classe apresenta um erro na diferenciação de exibição dos logs, gerando logs de mov ao fazer uma edição e vice versa
+
 public class LogProduto{
     private final Date dataProduto;
     private final int idLog;

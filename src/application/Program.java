@@ -2,8 +2,10 @@ package application;
 
 import model.entities.Produto;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Program {
@@ -12,6 +14,7 @@ public class Program {
 
     public static void main(String[] args) {
         try {
+            Locale.setDefault(new Locale("US"));
             produtos = new ArrayList<>();
             menuDaAplicacao();
         } catch (InputMismatchException erro) {
@@ -140,6 +143,8 @@ public class Program {
     public static void entradaSaidaProduto(){
         Produto produtoEncontrado = buscarIdProduto();
 
+        String path = "cadastroDeProdutos/src/resources/csvFiles";
+
         if (produtoEncontrado != null){
             System.out.println(produtoEncontrado);
             int opEnSa;
@@ -153,21 +158,62 @@ public class Program {
                 get.nextLine();
             }while(opEnSa <= 0 || opEnSa >= 3);
 
+            int qntdMovimentacao = 0;
+
             switch (opEnSa){
                 case 1:
                     System.out.print("Insira qntd de entrada:");
-                    produtoEncontrado.entradaDeEstoque(get.nextInt());
+                    qntdMovimentacao = get.nextInt();
                     get.nextLine();
+                    produtoEncontrado.entradaDeEstoque(qntdMovimentacao);
                     System.out.println(produtoEncontrado);
+
+                    path += "/buy.csv";
                     break;
                 case 2:
                     System.out.print("Insira qntd de saída:");
-                    produtoEncontrado.saidaDeEstoque(get.nextInt());
+                    qntdMovimentacao = get.nextInt();
                     get.nextLine();
+                    produtoEncontrado.saidaDeEstoque(qntdMovimentacao);
                     System.out.println(produtoEncontrado);
+
+                    path += "/sell.csv";
                     break;
                 default:
                     break;
+            }
+
+            try(BufferedWriter bw = new BufferedWriter(new FileWriter(path, true))){
+                bw.write(produtoEncontrado.getDescricao()+",");
+                bw.write(produtoEncontrado.getPreco()+",");
+                bw.write(qntdMovimentacao+"");
+                bw.newLine();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            if (path.equals("cadastroDeProdutos/src/resources/csvFiles/buy.csv")){
+
+                path = "cadastroDeProdutos/src/resources/csvFiles/summaries/summaryBuy.csv";
+
+                try(BufferedWriter bw = new BufferedWriter(new FileWriter(path, true))){
+                    bw.write(produtoEncontrado.getDescricao()+",");
+                    bw.write(String.format("%.2f", produtoEncontrado.montanteEmEstoque()));
+                    bw.newLine();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            else {
+                path = "cadastroDeProdutos/src/resources/csvFiles/summaries/summarySell.csv";
+
+                try (BufferedWriter bw = new BufferedWriter(new FileWriter(path, true))){
+                    bw.write(produtoEncontrado.getDescricao()+",");
+                    bw.write(String.format("%.2f", produtoEncontrado.montanteEmEstoque()));
+                    bw.newLine();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
         else {
@@ -219,8 +265,6 @@ public class Program {
                     System.out.println("Preço Alterado.");
                     break;
             }
-
-
         }
         else {
             System.out.println("Produto não Encontrado.");

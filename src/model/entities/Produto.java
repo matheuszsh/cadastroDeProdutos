@@ -83,12 +83,12 @@ public class Produto {
 
     public void saidaDeEstoque(int qntd) {
         this.qntd -= qntd;
-        this.logProduto.add(new LogProduto(this.codigoDeId, this.qntd, entradasSaidas.SAIDAS));
+        this.logProduto.add(new LogProduto(this.codigoDeId, qntd, entradasSaidas.SAIDAS));
     }
 
     public void entradaDeEstoque(int qntd) {
         this.qntd += qntd;
-        this.logProduto.add(new LogProduto(this.codigoDeId, this.qntd, entradasSaidas.ENTRADAS));
+        this.logProduto.add(new LogProduto(this.codigoDeId, qntd, entradasSaidas.ENTRADAS));
     }
 
     public void mostrarLogProduto(int option){
