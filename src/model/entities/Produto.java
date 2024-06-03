@@ -17,7 +17,7 @@ public class Produto {
     private Integer qntd;
     private Date dataDeCadastro;
 
-    private List<LogProduto> logProduto = new ArrayList<>();
+    private List<LogProdutoAbstract> logProduto = new ArrayList<>();
 
     public Produto(String codigoDeId, String descricao, Double preco, Integer qntd) {
         this.codigoDeId = codigoDeId;
@@ -46,7 +46,7 @@ public class Produto {
         String oldCodigo = this.codigoDeId;
         this.codigoDeId = codigoDeId;
         this.dataDeCadastro = new Date();
-        this.logProduto.add(new LogProduto(codigoDeId, oldCodigo, editMenu.CODIGO));
+        this.logProduto.add(new LogProdutoEdit(codigoDeId, oldCodigo, editMenu.CODIGO));
     }
 
     public String getDescricao() {
@@ -57,7 +57,7 @@ public class Produto {
         String oldDescricao = this.descricao;
         this.descricao = descricao;
         this.dataDeCadastro = new Date();
-        this.logProduto.add(new LogProduto(codigoDeId,descricao, oldDescricao, editMenu.DESCRICAO));
+        this.logProduto.add(new LogProdutoEdit(codigoDeId,descricao, oldDescricao, editMenu.DESCRICAO));
 
     }
 
@@ -69,7 +69,7 @@ public class Produto {
         Double oldPreco = this.preco;
         this.preco = preco;
         this.dataDeCadastro = new Date();
-        this.logProduto.add(new LogProduto(codigoDeId,preco, oldPreco, editMenu.PRECO));
+        this.logProduto.add(new LogProdutoEdit(codigoDeId,preco, oldPreco, editMenu.PRECO));
 
     }
 
@@ -83,20 +83,26 @@ public class Produto {
 
     public void saidaDeEstoque(int qntd) {
         this.qntd -= qntd;
-        this.logProduto.add(new LogProduto(this.codigoDeId, qntd, entradasSaidas.SAIDAS));
+        this.logProduto.add(new LogProdutoMov(this.codigoDeId, qntd, entradasSaidas.SAIDAS));
     }
 
     public void entradaDeEstoque(int qntd) {
         this.qntd += qntd;
-        this.logProduto.add(new LogProduto(this.codigoDeId, qntd, entradasSaidas.ENTRADAS));
+        this.logProduto.add(new LogProdutoMov(this.codigoDeId, qntd, entradasSaidas.ENTRADAS));
     }
 
-    public void mostrarLogProduto(int option){
-        for (LogProduto logProdutos : logProduto){
-            if (option == 1) {
-                System.out.println(logProdutos.logMovmentacoes());
-            } else if (option == 2) {
-                System.out.println(logProdutos.logEdicoes());
+    public void mostrarLogEdicoes(){
+        for (LogProdutoAbstract logDoProduto : logProduto){
+            if (logDoProduto instanceof LogProdutoEdit) {
+                System.out.println(logDoProduto);
+            }
+        }
+    }
+
+    public void mostrarLogMov(){
+        for (LogProdutoAbstract logDoProduto : logProduto){
+            if (logDoProduto instanceof LogProdutoMov) {
+                System.out.println(logDoProduto);
             }
         }
     }

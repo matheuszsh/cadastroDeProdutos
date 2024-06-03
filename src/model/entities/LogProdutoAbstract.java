@@ -2,10 +2,16 @@ package model.entities;
 
 import java.util.Date;
 
-public abstract class LogProdutoTest {
-    private Date dataProduto;
-    private int idLog;
-    private String codigoId;
+public abstract class LogProdutoAbstract {
+    protected Date dataProduto;
+    protected Integer idLog;
+    protected String codigoId;
+
+    public LogProdutoAbstract() {
+        this.dataProduto = new Date();
+        this.idLog = null;
+        this.codigoId = codigoId;
+    }
 
     public Date getDataProduto() {
         return dataProduto;
@@ -17,9 +23,5 @@ public abstract class LogProdutoTest {
 
     public String getCodigoId() {
         return codigoId;
-    }
-
-    public void setCodigoId(String codigoId) {
-        this.codigoId = codigoId;
     }
 }

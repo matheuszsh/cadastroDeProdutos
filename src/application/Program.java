@@ -19,8 +19,14 @@ public class Program {
             menuDaAplicacao();
         } catch (InputMismatchException erro) {
             System.out.println("Erro: Insira uma entrada válida do tipo inteiro.");
-        }   catch (RuntimeException erro){
-            System.out.println("Erro: RuntimeException");
+        } catch (NullPointerException erro){
+            System.out.println(erro);
+        } catch (IndexOutOfBoundsException erro){
+            System.out.println(erro);
+        } catch (ClassCastException erro){
+            System.out.println(erro);
+        } catch (RuntimeException erro){
+            System.out.println(erro);
         }
     }
     // Aperte enter
@@ -160,20 +166,18 @@ public class Program {
 
             int qntdMovimentacao = 0;
 
+            System.out.print("Insira qntd de entrada:");
+            qntdMovimentacao = get.nextInt();
+            get.nextLine();
+
             switch (opEnSa){
                 case 1:
-                    System.out.print("Insira qntd de entrada:");
-                    qntdMovimentacao = get.nextInt();
-                    get.nextLine();
                     produtoEncontrado.entradaDeEstoque(qntdMovimentacao);
                     System.out.println(produtoEncontrado);
 
                     path += "/buy.csv";
                     break;
                 case 2:
-                    System.out.print("Insira qntd de saída:");
-                    qntdMovimentacao = get.nextInt();
-                    get.nextLine();
                     produtoEncontrado.saidaDeEstoque(qntdMovimentacao);
                     System.out.println(produtoEncontrado);
 
@@ -280,8 +284,11 @@ public class Program {
             get.nextLine();
 
             switch (logOpcao){
-                case 1, 2:
-                    produtoEncontrado.mostrarLogProduto(logOpcao);
+                case 1:
+                    produtoEncontrado.mostrarLogMov();
+                    break;
+                case 2:
+                    produtoEncontrado.mostrarLogEdicoes();
                     break;
                 default:
                     System.out.println("Opção inválida.");
