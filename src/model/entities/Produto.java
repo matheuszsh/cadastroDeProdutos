@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Produto {
+public class Produto<T>{
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
     private String codigoDeId;
@@ -43,10 +43,7 @@ public class Produto {
     }
 
     public void setCodigoDeId(String codigoDeId) {
-        String oldCodigo = this.codigoDeId;
         this.codigoDeId = codigoDeId;
-        this.dataDeCadastro = new Date();
-        this.logProduto.add(new LogProdutoEdit(codigoDeId, oldCodigo, editMenu.CODIGO));
     }
 
     public String getDescricao() {
@@ -54,11 +51,7 @@ public class Produto {
     }
 
     public void setDescricao(String descricao) {
-        String oldDescricao = this.descricao;
-        this.descricao = descricao;
-        this.dataDeCadastro = new Date();
-        this.logProduto.add(new LogProdutoEdit(codigoDeId,descricao, oldDescricao, editMenu.DESCRICAO));
-
+       this.descricao = descricao;
     }
 
     public Double getPreco() {
@@ -66,11 +59,7 @@ public class Produto {
     }
 
     public void setPreco(Double preco) {
-        Double oldPreco = this.preco;
         this.preco = preco;
-        this.dataDeCadastro = new Date();
-        this.logProduto.add(new LogProdutoEdit(codigoDeId,preco, oldPreco, editMenu.PRECO));
-
     }
 
     public Integer getQntd() {
@@ -91,6 +80,27 @@ public class Produto {
         this.logProduto.add(new LogProdutoMov(this.codigoDeId, qntd, entradasSaidas.ENTRADAS));
     }
 
+    public void gerarLogEdicoes(int selector, T arg) {
+        this.dataDeCadastro = new Date();
+
+        switch (selector) {
+            case 1:
+                String oldCodigo = this.codigoDeId;
+                setCodigoDeId((String) arg);
+                this.logProduto.add(new LogProdutoEdit(codigoDeId, oldCodigo, editMenu.CODIGO));
+                break;
+            case 2:
+                String oldDescricao = this.descricao;
+                setDescricao((String) arg);
+                this.logProduto.add(new LogProdutoEdit(codigoDeId, descricao, oldDescricao, editMenu.DESCRICAO));
+                break;
+            case 3:
+                Double oldPreco = this.preco;
+                setPreco((Double) arg);
+                this.logProduto.add(new LogProdutoEdit(codigoDeId, preco, oldPreco, editMenu.PRECO));
+                break;
+        }
+    }
     public void mostrarLogEdicoes(){
         for (LogProdutoAbstract logDoProduto : logProduto){
             if (logDoProduto instanceof LogProdutoEdit) {

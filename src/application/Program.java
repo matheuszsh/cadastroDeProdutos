@@ -166,7 +166,7 @@ public class Program {
 
             int qntdMovimentacao = 0;
 
-            System.out.print("Insira qntd de entrada:");
+            System.out.print("Insira qntd de Entrada/Saida:");
             qntdMovimentacao = get.nextInt();
             get.nextLine();
 
@@ -252,19 +252,21 @@ public class Program {
                         System.out.print("Novo Código:");
                         novoCodProduto = get.nextLine();
                     }while(buscarIdProduto(novoCodProduto) != null);
-                    produtoEncontrado.setCodigoDeId(novoCodProduto);
+                    produtoEncontrado.gerarLogEdicoes(opEditar, novoCodProduto);
                     System.out.println("Código Alterado.");
                     break;
                 case 2:
                     System.out.println("Editar Descrição "+ produtoEncontrado.getDescricao());
                     System.out.print("Nova Descrição:");
-                    produtoEncontrado.setDescricao(get.nextLine());
+                    String novaDescricao = get.nextLine();
+                    produtoEncontrado.gerarLogEdicoes(opEditar, novaDescricao);
                     System.out.println("Descrição Alterada.");
                     break;
                 case 3:
                     System.out.println("Editar Preço "+ produtoEncontrado.getPreco());
                     System.out.print("Novo Preço:");
-                    produtoEncontrado.setPreco(get.nextDouble());
+                    Double novoPreco = get.nextDouble();
+                    produtoEncontrado.gerarLogEdicoes(opEditar, novoPreco);
                     get.nextLine();
                     System.out.println("Preço Alterado.");
                     break;
