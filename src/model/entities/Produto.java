@@ -19,6 +19,12 @@ public class Produto<T>{
 
     private List<LogProdutoAbstract> logProduto = new ArrayList<>();
 
+    public Produto(){
+        this.preco = 0.0;
+        this.qntd = 0;
+        this.dataDeCadastro = new Date();
+    }
+
     public Produto(String codigoDeId, String descricao, Double preco, Integer qntd) {
         this.codigoDeId = codigoDeId;
         this.descricao = descricao;
@@ -64,6 +70,14 @@ public class Produto<T>{
 
     public Integer getQntd() {
         return qntd;
+    }
+
+    public void setQntd(Integer qntd){
+        this.qntd = qntd;
+    }
+
+    public LogProdutoMov getLastLog(){
+       return (LogProdutoMov) this.logProduto.get(logProduto.size() - 1);
     }
 
     public double montanteEmEstoque() {
