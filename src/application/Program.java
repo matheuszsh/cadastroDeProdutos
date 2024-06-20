@@ -69,7 +69,7 @@ public class Program {
                 menuDaAplicacao();
                 break;
             case 2:
-                System.out.println(buscarIdProduto());
+                System.out.println(buscarIdProdutoNoArgs());
                 aperteEnter();
                 menuDaAplicacao();
             case 3:
@@ -96,14 +96,13 @@ public class Program {
 
         System.out.println("CADASTRO DE PRODUTO:\n");
 
-        Produto produtoEncontrado = buscarIdProduto();
+        System.out.print("Informe o código do produto:");
+        String pCodId = get.nextLine();
+
+        Produto produtoEncontrado = buscarIdProdutoWithArgs(pCodId);
 
 
         if (produtoEncontrado == null) {
-
-            System.out.print("Informa Novamente o novo código:");
-            String pCodId = get.nextLine();
-
             System.out.print("Descrição do produto:");
             String pDescricao = get.nextLine();
 
@@ -138,7 +137,32 @@ public class Program {
     // Métodos Utiliátios
 
     // Busca Por ID
-    public static Produto buscarIdProduto(){
+    public static Produto buscarIdProdutoWithArgs(String novoCodProduto){
+
+        try(BufferedReader bf = new BufferedReader( new FileReader(pathFilesCsv + "\\produtosCad.csv"))){
+            String line;
+            while ((line = bf.readLine()) != null){
+                String[] lineArray = line.split(",");
+                if (lineArray.length > 0 && lineArray[0].trim().equals(novoCodProduto.trim())){
+                    updateDataProduct(lineArray);
+                }
+            }
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        for (Produto produto: produtos ) {
+            if (novoCodProduto.equals(produto.getCodigoDeId())){
+                    return produto;
+            }
+        }
+        return null;
+    }
+
+    public static Produto buscarIdProdutoNoArgs(){
         System.out.print("Informe o código do produto:");
         String pCodId = get.nextLine();
 
@@ -159,15 +183,16 @@ public class Program {
 
         for (Produto produto: produtos ) {
             if (pCodId.equals(produto.getCodigoDeId())){
-                    return produto;
+                return produto;
             }
         }
         return null;
     }
 
+
     // Entrada e saída de produtos
     public static void entradaSaidaProduto(){
-        Produto produtoEncontrado = buscarIdProduto();
+        Produto produtoEncontrado = buscarIdProdutoNoArgs();
 
         String path = "cadastroDeProdutos/src/resources/csvFiles";
 
@@ -241,7 +266,7 @@ public class Program {
             }
 
             try (BufferedWriter bw = new BufferedWriter(new FileWriter(pathFilesTxt+"\\sellBuyLogs.txt", true))){
-                bw.write(String.valueOf(produtoEncontrado.getLastLog()));
+                bw.write(String.valueOf(produtoEncontrado.getLastLogMov()));
                 bw.newLine();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -256,7 +281,7 @@ public class Program {
 
     // Função para editar produtos
     public static void editarProduto(){
-        Produto produtoEncontrado = buscarIdProduto();
+        Produto produtoEncontrado = buscarIdProdutoNoArgs();
 
         if (produtoEncontrado != null){
             int opEditar;
@@ -271,6 +296,8 @@ public class Program {
                 get.nextLine();
             }while (opEditar <= 0 || opEditar >= 4);
 
+            ArrayList<String> lines = new ArrayList<String>();
+
             switch (opEditar){
                 case 1:
                     System.out.println("Editar Código "+ produtoEncontrado.getCodigoDeId());
@@ -278,7 +305,28 @@ public class Program {
                     do {
                         System.out.print("Novo Código:");
                         novoCodProduto = get.nextLine();
-                    }while(novoCodProduto.equals(produtoEncontrado.getCodigoDeId()));
+                    }while(buscarIdProdutoWithArgs(novoCodProduto) != null);
+
+                    try (BufferedReader br = new BufferedReader(new FileReader(pathFilesCsv+"\\produtosCad.csv"))){
+                        String line;
+                        while ((line = br.readLine()) != null){
+                            if (line.contains(produtoEncontrado.getCodigoDeId())){
+                                String[] arrayline = line.split(",");
+                                arrayline[opEditar-1] = novoCodProduto.trim();
+
+                                String newLine = String.join(",", arrayline);
+
+                                lines.add(newLine);
+                            }else {
+                                lines.add(line);
+                            }
+                        }
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
                     produtoEncontrado.gerarLogEdicoes(opEditar, novoCodProduto);
                     System.out.println("Código Alterado.");
                     break;
@@ -286,6 +334,33 @@ public class Program {
                     System.out.println("Editar Descrição "+ produtoEncontrado.getDescricao());
                     System.out.print("Nova Descrição:");
                     String novaDescricao = get.nextLine();
+
+                    try (BufferedReader br = new BufferedReader(new FileReader(pathFilesCsv+"\\produtosCad.csv"))){
+                        String line;
+                        while ((line = br.readLine()) != null){
+                            if (line.contains(produtoEncontrado.getCodigoDeId())){
+                                String[] arrayline = line.split(",");
+                                arrayline[opEditar-1] = novaDescricao.trim();
+
+                                String newLine = String.join(",", arrayline);
+
+                                lines.add(newLine);
+                            }else {
+                                lines.add(line);
+                            }
+                        }
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    try (BufferedWriter bw = new BufferedWriter(new FileWriter(pathFilesCsv+"\\ProtutosCad.csv", true))){
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
                     produtoEncontrado.gerarLogEdicoes(opEditar, novaDescricao);
                     System.out.println("Descrição Alterada.");
                     break;
@@ -293,10 +368,47 @@ public class Program {
                     System.out.println("Editar Preço "+ produtoEncontrado.getPreco());
                     System.out.print("Novo Preço:");
                     Double novoPreco = get.nextDouble();
+
+                    try (BufferedReader br = new BufferedReader(new FileReader(pathFilesCsv+"\\produtosCad.csv"))){
+                        String line;
+                        while ((line = br.readLine()) != null){
+                            if (line.contains(produtoEncontrado.getCodigoDeId())){
+                                String[] arrayline = line.split(",");
+                                arrayline[opEditar-1] = String.valueOf(novoPreco).trim();
+
+                                String newLine = String.join(",", arrayline);
+
+                                lines.add(newLine);
+                            }else {
+                                lines.add(line);
+                            }
+                        }
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
                     produtoEncontrado.gerarLogEdicoes(opEditar, novoPreco);
                     get.nextLine();
                     System.out.println("Preço Alterado.");
                     break;
+            }
+
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(pathFilesCsv+"\\produtosCad.csv"))){
+                for (String l : lines){
+                    bw.write(l);
+                    bw.newLine();
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(pathFilesTxt+"\\editProductLog.txt",true))){
+                bw.write(String.valueOf(produtoEncontrado.getLastLogEdit()));
+                bw.newLine();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
         else {
@@ -305,7 +417,7 @@ public class Program {
         aperteEnter();
     }
     public static void logsDeProduto(){
-        Produto produtoEncontrado = buscarIdProduto();
+        Produto produtoEncontrado = buscarIdProdutoNoArgs();
 
         if (produtoEncontrado != null){
             System.out.print("Selecione o tipo de Log:\n\n(1) - Entradas & Saidas\n(2) - Edições\n\n>>:");
@@ -327,8 +439,17 @@ public class Program {
                     } ;
                     break;
                 case 2:
-                    //Alterar
-                    produtoEncontrado.mostrarLogEdicoes();
+                    try(BufferedReader br = new BufferedReader( new FileReader(pathFilesTxt+"\\editProductLog.txt"))) {
+                        String line = br.readLine();
+                        while (line != null) {
+                            if (line.contains(produtoEncontrado.getCodigoDeId())){
+                                System.out.println(line);
+                            }
+                            line = br.readLine();
+                        }
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    } ;
                     break;
                 default:
                     System.out.println("Opção inválida.");
@@ -343,14 +464,37 @@ public class Program {
     }
 
     //Função pra remover produtos
-    public static void removerProduto(){
-        Produto produtoEncontrado = buscarIdProduto();
+    public static void removerProduto() {
+        Produto produtoEncontrado = buscarIdProdutoNoArgs();
 
-        if (produtoEncontrado != null){
-            System.out.println("Produto Código '"+produtoEncontrado.getCodigoDeId() + "' Removido.");
+        if (produtoEncontrado != null) {
+            System.out.println("Produto Código '" + produtoEncontrado.getCodigoDeId() + "' Removido.");
             produtos.remove(produtoEncontrado);
-        }
-        else {
+
+            ArrayList<String> lines = new ArrayList<>();
+
+            try (BufferedReader br = new BufferedReader(new FileReader(pathFilesCsv + "\\produtosCad.csv"))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    if (!line.contains(produtoEncontrado.getCodigoDeId())) {
+                        lines.add(line);
+                    }
+                }
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(pathFilesCsv + "\\produtosCad.csv"))) {
+                for (String line : lines) {
+                    bw.write(line);
+                    bw.newLine();
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
             System.out.println("Produto Inexistente.");
         }
 

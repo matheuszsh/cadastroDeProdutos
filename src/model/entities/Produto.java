@@ -76,8 +76,12 @@ public class Produto<T>{
         this.qntd = qntd;
     }
 
-    public LogProdutoMov getLastLog(){
+    public LogProdutoMov getLastLogMov(){
        return (LogProdutoMov) this.logProduto.get(logProduto.size() - 1);
+    }
+
+    public LogProdutoEdit getLastLogEdit(){
+        return (LogProdutoEdit) this.logProduto.get(logProduto.size() - 1);
     }
 
     public double montanteEmEstoque() {
